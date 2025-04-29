@@ -1,6 +1,4 @@
-// app/api/index.ts
-// (Content is identical to the previous src/api/index.ts, but check imports)
-import { FormResponse, User } from "../types/form"; // Adjusted path potentially needed
+import { FormResponse, User } from "../types/form";
 
 const API_BASE_URL = "https://dynamic-form-generator-9rl7.onrender.com";
 
@@ -31,9 +29,7 @@ export const getFormStructure = async (
     `${API_BASE_URL}/get-form?rollNumber=${encodeURIComponent(rollNumber)}`,
     {
       method: "GET",
-      headers: {
-        // Add any required headers here if needed in future
-      },
+      headers: {},
     }
   );
 
