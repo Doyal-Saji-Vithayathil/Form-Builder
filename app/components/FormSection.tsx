@@ -1,17 +1,16 @@
 import React from "react";
-
 import {
   FormSection as FormSectionType,
   FormData,
   FormErrors,
 } from "../types/form";
 import FormField from "./FormField";
-
 interface FormSectionProps {
   section: FormSectionType;
   formData: FormData;
   errors: FormErrors;
-  onFieldChange: (fieldId: string, value: any) => void;
+
+  onFieldChange: (fieldId: string, value: string | boolean) => void;
 }
 
 const FormSection: React.FC<FormSectionProps> = ({

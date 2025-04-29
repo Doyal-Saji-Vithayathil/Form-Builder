@@ -1,11 +1,17 @@
 import { FormField, FormData, FormErrors } from "../types/form";
 
+type FormDataValue = FormData[keyof FormData] | undefined | null;
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const TEL_REGEX = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
 
-export const validateField = (field: FormField, value: any): string | null => {
+export const validateField = (
+  field: FormField,
+  value: FormDataValue
+): string | null => {
   const stringValue = typeof value === "string" ? value.trim() : "";
+
   const arrayValue = Array.isArray(value) ? value : [];
   const booleanValue = typeof value === "boolean" ? value : false;
 
@@ -19,10 +25,12 @@ export const validateField = (field: FormField, value: any): string | null => {
       case "dropdown":
         isEmpty = !stringValue;
         break;
+
       default:
         isEmpty = !stringValue;
         break;
     }
+
     if (isEmpty) {
       return field.validation?.message || `${field.label} is required.`;
     }

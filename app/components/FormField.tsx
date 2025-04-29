@@ -1,12 +1,13 @@
 import React from "react";
+import { FormField as FormFieldType } from "../types/form";
 
-import { FormField as FormFieldType, FormData } from "../types/form";
+type FieldValue = string | boolean | string[] | undefined | null;
 
 interface FormFieldProps {
   field: FormFieldType;
-  value: any;
+  value: FieldValue;
   error: string | undefined;
-  onChange: (fieldId: string, value: any) => void;
+  onChange: (fieldId: string, value: string | boolean) => void;
 }
 
 const FormField: React.FC<FormFieldProps> = ({
@@ -54,7 +55,7 @@ const FormField: React.FC<FormFieldProps> = ({
             type={type}
             id={fieldId}
             name={fieldId}
-            value={value || ""}
+            value={typeof value === "string" ? value : ""}
             placeholder={placeholder}
             onChange={handleInputChange}
             required={required}
@@ -71,7 +72,7 @@ const FormField: React.FC<FormFieldProps> = ({
           <textarea
             id={fieldId}
             name={fieldId}
-            value={value || ""}
+            value={typeof value === "string" ? value : ""}
             placeholder={placeholder}
             onChange={handleInputChange}
             required={required}
@@ -88,7 +89,7 @@ const FormField: React.FC<FormFieldProps> = ({
           <select
             id={fieldId}
             name={fieldId}
-            value={value || ""}
+            value={typeof value === "string" ? value : ""}
             onChange={handleInputChange}
             required={required}
             data-testid={dataTestId}
@@ -126,7 +127,7 @@ const FormField: React.FC<FormFieldProps> = ({
                   type="radio"
                   name={fieldId}
                   value={option.value}
-                  checked={value === option.value}
+                  checked={typeof value === "string" && value === option.value}
                   onChange={handleRadioChange}
                   required={required}
                   data-testid={option.dataTestId}
@@ -138,29 +139,34 @@ const FormField: React.FC<FormFieldProps> = ({
           </div>
         );
       case "checkbox":
+        const isChecked = typeof value === "boolean" ? value : false;
         return (
           <label>
             <input
               type="checkbox"
               id={fieldId}
               name={fieldId}
-              checked={!!value}
+              checked={isChecked}
               onChange={handleCheckboxChange}
               required={required}
               data-testid={dataTestId}
               aria-describedby={error ? `${fieldId}-error` : undefined}
               aria-invalid={!!error}
             />
-            {label}
+            {}
+            {label} {}
           </label>
         );
+
       default:
-        return <p>Unsupported field type: {type}</p>;
+        const exhaustiveCheck: never = type;
+        return <p>Unsupported field type: {exhaustiveCheck}</p>;
     }
   };
 
   return (
     <div className="form-field">
+      {}
       {type !== "checkbox" && (
         <label htmlFor={fieldId} id={`${fieldId}-label`}>
           {label}

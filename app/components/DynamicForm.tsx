@@ -1,4 +1,3 @@
-// app/components/DynamicForm.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -19,20 +18,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ user }) => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number>(0);
   const [formData, setFormData] = useState<FormData>({});
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Start loading
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [apiError, setApiError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  // --- Add state to track if the component has mounted ---
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Mark as mounted on the client
     setIsMounted(true);
 
     const fetchForm = async () => {
-      // Keep setIsLoading(true) here to handle potential re-fetches if needed
-      // but the initial loading state is handled by isMounted now.
       setIsLoading(true);
       setApiError(null);
       try {
@@ -56,20 +51,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ user }) => {
     };
 
     fetchForm();
-  }, [user.rollNumber]); // Dependency array
+  }, [user.rollNumber]);
 
-  // --- Updated Rendering Logic ---
-
-  // 1. On the server, AND on the client before mount, render nothing or a basic placeholder
-  //    This ensures the initial server/client HTML matches (often by rendering nothing complex).
   if (!isMounted) {
-    // Render null or a very simple placeholder that matches what the server would render
-    // *before* any client-side logic runs. Null is often safest.
     return null;
-    // Or return <div>Loading...</div>; if that's acceptable and simple.
   }
 
-  // 2. After mounting on the client, handle loading/error states
   if (isLoading) {
     return <div>Loading form structure...</div>;
   }
@@ -78,18 +65,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ user }) => {
     return <div className="error-message">Error loading form: {apiError}</div>;
   }
 
-  // 3. Handle the case where loading finished but the structure is still missing
   if (!formStructure) {
-    // This might happen if the API returns success but an empty form, or edge cases.
     return <div>Form data not available.</div>;
   }
 
-  // 4. Only render the full form when mounted, not loading, no errors, and structure exists
   const currentSection = formStructure.sections[currentSectionIndex];
 
-  // Rest of the component logic (handlers) remain the same...
-  const handleFieldChange = (fieldId: string, value: any) => {
-    // ... (implementation unchanged)
+  const handleFieldChange = (fieldId: string, value: string | boolean) => {
     setFormData((prevData) => ({
       ...prevData,
       [fieldId]: value,
@@ -104,7 +86,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ user }) => {
   };
 
   const goToSection = (index: number) => {
-    // ... (implementation unchanged)
     if (formStructure && index >= 0 && index < formStructure.sections.length) {
       setErrors({});
       setCurrentSectionIndex(index);
@@ -112,7 +93,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ user }) => {
   };
 
   const handleNext = () => {
-    // ... (implementation unchanged)
     if (!formStructure) return;
     const currentSection = formStructure.sections[currentSectionIndex];
     const { isValid, errors: sectionErrors } = validateSection(
@@ -128,12 +108,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ user }) => {
   };
 
   const handlePrev = () => {
-    // ... (implementation unchanged)
     goToSection(currentSectionIndex - 1);
   };
 
   const handleSubmit = () => {
-    // ... (implementation unchanged)
     if (!formStructure || isSubmitting) return;
     const lastSection = formStructure.sections[currentSectionIndex];
     const { isValid, errors: sectionErrors } = validateSection(
